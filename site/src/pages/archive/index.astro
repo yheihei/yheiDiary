@@ -1,0 +1,22 @@
+---
+import { getDb } from "emdash/runtime";
+import { sql } from "kysely";
+import Base from "../../layouts/Base.astro";
+// Read dates only. Loading and converting every article body on an archive view
+// exceeds the small CPU budget of Workers Free as the diary grows.
+const db = await getDb();
+const result = await sql<{ year: string; count: number }>`
+  SELECT substr(published_at, 1, 4) AS year, count(*) AS count
+  FROM ec_posts
+  WHERE status = 'published' AND published_at IS NOT NULL
+  GROUP BY substr(published_at, 1, 4)
+  ORDER BY year DESC
+`.execute(db);
+if (Astro.cache?.enabled) Astro.cache.set({ tags: ["posts"] });
+const sorted = result.rows.map((row) => [Number(row.year), Number(row.count)] as const);
+---
+<Base title="年別アーカイブ" description="日記を年ごとに読む">
+  <header class="band intro"><div class="frame"><p class="eyebrow">Archive</p><h1 class="intro__title">年別アーカイブ</h1><p>過去の文章を、書いた年から探せます。</p></div></header>
+  <section class="band section"><div class="frame"><ul class="years">{sorted.map(([year,count]) => <li><a href={`/archive/${year}`}><strong>{year}年</strong><span>{count}件 →</span></a></li>)}</ul></div></section>
+</Base>
+<style>.years{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:1rem;list-style:none;padding:0}.years a{display:flex;justify-content:space-between;padding:1.2rem;border:1px solid var(--color-border);border-radius:.75rem;text-decoration:none;color:var(--color-text)}.years span{color:var(--color-text-secondary)}</style>

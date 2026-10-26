@@ -1,0 +1,201 @@
+{
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "Yhei Diary",
+    "description": "長く残す個人の日記",
+    "author": "Yhei"
+  },
+  "settings": {
+    "title": "Yheiの日記",
+    "tagline": "大学生のころから、これから先まで。"
+  },
+  "collections": [
+    {
+      "slug": "posts",
+      "label": "日記",
+      "labelSingular": "記事",
+      "urlPattern": "/posts/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "scheduling",
+        "search",
+        "seo"
+      ],
+      "commentsEnabled": false,
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "image"
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        },
+        {
+          "slug": "excerpt",
+          "label": "Excerpt",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "slug": "pages",
+      "label": "ページ",
+      "labelSingular": "Page",
+      "urlPattern": "/pages/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        }
+      ]
+    }
+  ],
+  "taxonomies": [
+    {
+      "name": "category",
+      "label": "Categories",
+      "labelSingular": "Category",
+      "hierarchical": true,
+      "collections": [
+        "posts"
+      ],
+      "terms": []
+    },
+    {
+      "name": "tag",
+      "label": "Tags",
+      "labelSingular": "Tag",
+      "hierarchical": false,
+      "collections": [
+        "posts"
+      ],
+      "terms": []
+    }
+  ],
+  "bylines": [],
+  "menus": [
+    {
+      "name": "primary",
+      "label": "メインメニュー",
+      "items": [
+        {
+          "type": "custom",
+          "label": "ホーム",
+          "url": "/"
+        },
+        {
+          "type": "custom",
+          "label": "日記",
+          "url": "/posts"
+        },
+        {
+          "type": "custom",
+          "label": "年別",
+          "url": "/archive"
+        },
+        {
+          "type": "custom",
+          "label": "プロフィール",
+          "url": "/profile"
+        }
+      ]
+    }
+  ],
+  "widgetAreas": [],
+  "sections": [
+    {
+      "slug": "newsletter-signup",
+      "title": "Newsletter Signup",
+      "description": "A call-to-action block for newsletter subscriptions",
+      "keywords": [
+        "newsletter",
+        "subscribe",
+        "email",
+        "cta"
+      ],
+      "source": "theme",
+      "content": [
+        {
+          "_type": "block",
+          "style": "h3",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Stay in the loop",
+              "_key": "k1"
+            }
+          ],
+          "_key": "k0"
+        },
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "Get notified when new posts are published. No spam, unsubscribe anytime.",
+              "_key": "k3"
+            }
+          ],
+          "_key": "k2"
+        }
+      ]
+    },
+    {
+      "slug": "about-author",
+      "title": "About the Author",
+      "description": "Brief author bio for use in posts or pages",
+      "keywords": [
+        "author",
+        "bio",
+        "about"
+      ],
+      "source": "theme",
+      "content": [
+        {
+          "_type": "block",
+          "style": "normal",
+          "children": [
+            {
+              "_type": "span",
+              "text": "A software developer who writes about building things on the web. Based somewhere with good coffee and reliable internet.",
+              "_key": "k1"
+            }
+          ],
+          "_key": "k0"
+        }
+      ]
+    }
+  ],
+  "content": {}
+}

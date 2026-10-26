@@ -1,0 +1,67 @@
+---
+import { getEmDashCollection } from "emdash";
+import Base from "../layouts/Base.astro";
+
+const { entries: posts, error, cacheHint } = await getEmDashCollection("posts", {
+  orderBy: { published_at: "desc" },
+  limit: 6,
+});
+if (error) return new Response("日記を読み込めませんでした", { status: 500 });
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+const projects = [
+  { name: "VLCNP Story", href: "https://vlcnp-story.y-game.dev/", detail: "ゲーム公式サイト", image: "/project-covers/vlcnp.jpg", imageAlt: "VLCNP Storyのパンダのキービジュアル", fallback: "VLCNP", shape: "wide", width: 1200, height: 630 },
+  { name: "カルマロック", href: "https://apps.apple.com/jp/app/%E3%82%AB%E3%83%AB%E3%83%9E%E3%83%AD%E3%83%83%E3%82%AF/id6811883726", detail: "iPhoneアプリ · App Store", image: "/project-covers/karma.jpg", imageAlt: "カルマロックの南京錠型アプリアイコン", fallback: "KARMA", shape: "square", width: 512, height: 512 },
+  { name: "YouTube", href: "https://www.youtube.com/@yhei_hei", detail: "ゲーム制作の動画", image: "/project-covers/youtube.jpg", imageAlt: "わいへいのYouTubeチャンネルアイコン", fallback: "YouTube", shape: "square", width: 900, height: 900 },
+  { name: "Spotify", href: "https://open.spotify.com/show/1e6S1mfphGGh8O1K9ZU9Ze", detail: "素人ゲーム制作者の日常", image: "/project-covers/spotify.jpg", imageAlt: "ポッドキャスト『素人ゲーム制作者の日常』のカバー", fallback: "Spotify", shape: "square", width: 640, height: 640 },
+  { name: "note", href: "https://note.com/yheihei0126", detail: "制作と日々の記録", image: "/project-covers/note.jpg", imageAlt: "わいへいのnoteページのゲーム画面", fallback: "note", shape: "wide", width: 1024, height: 536 },
+];
+---
+<Base title="Yheiの日記" description="大学生のころから、これから先まで。">
+  <header class="band intro"><div class="frame">
+    <p class="eyebrow">Yhei diary</p>
+    <h1 class="intro__title">ベリーロング日記。</h1>
+    <p class="intro__lead">大学生のころから書いてきたことを、これから先まで残すための場所です。<br />仕事、家族、制作、考えたこと。</p>
+  </div></header>
+  <section class="band section"><div class="frame">
+    <h2>主なプロジェクト</h2>
+    <ul class="portal">
+      {projects.map((project) => <li>
+        <a class="portal__card" href={project.href} target="_blank" rel="noopener noreferrer">
+          <span class="portal__visual">
+            <span class="portal__fallback" aria-hidden="true">{project.fallback}</span>
+            <img class={project.shape === "square" ? "portal__image portal__image--square" : "portal__image"} src={project.image} alt={project.imageAlt} width={project.width} height={project.height} loading="lazy" decoding="async" onerror="this.remove()" />
+          </span>
+          <span class="portal__copy"><strong>{project.name}</strong><span class="portal__detail">{project.detail}<span aria-hidden="true"> ↗</span></span></span>
+        </a>
+      </li>)}
+    </ul>
+  </div></section>
+  <section class="band section"><div class="frame">
+    <div class="heading"><h2>新着日記</h2><a href="/posts">すべて見る →</a></div>
+    {posts.length ? <ol class="diary-list">{posts.map((post) =>
+      <li><a href={`/posts/${post.id}`}>{post.data.title}</a><time>{post.data.publishedAt?.toLocaleDateString("ja-JP")}</time></li>
+    )}</ol> : <p>日記は移行準備中です。</p>}
+    <p><a href="/archive">年別アーカイブを見る →</a></p>
+  </div></section>
+</Base>
+<style>
+  .intro__lead {max-width: 46rem; line-height: 1.8}
+  .portal {display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; list-style: none; padding: 0; margin-top: 1.5rem}
+  .portal li {min-width: 0}
+  .portal__card {display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: var(--color-surface); text-decoration: none; color: var(--color-text)}
+  .portal__card:hover {border-color: var(--color-brand); box-shadow: var(--shadow-card-hover)}
+  .portal__card:focus-visible {outline: 3px solid var(--color-brand); outline-offset: 3px}
+  .portal__visual {position: relative; display: grid; place-items: center; aspect-ratio: 1200 / 630; overflow: hidden; background: var(--color-fill)}
+  .portal__fallback {color: var(--color-text-secondary); font-size: .9rem; font-weight: 600; letter-spacing: .04em}
+  .portal__image {position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover}
+  .portal__image--square {object-fit: contain}
+  .portal__copy {display: grid; align-content: start; gap: .3rem; min-width: 0; padding: .9rem .95rem 1rem}
+  .portal__copy strong {font-size: 1rem; line-height: 1.45; overflow-wrap: anywhere}
+  .portal__detail {color: var(--color-text-secondary); font-size: .82rem; line-height: 1.5; overflow-wrap: anywhere}
+  @media (max-width: 42rem) {.portal {grid-template-columns: 1fr}}
+
+  .heading {display: flex; align-items: baseline; justify-content: space-between; gap: 1rem}
+  .diary-list {list-style: none; padding: 0; margin: 1.5rem 0}
+  .diary-list li {display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border)}
+  .diary-list time {color: var(--color-text-secondary)}
+</style>

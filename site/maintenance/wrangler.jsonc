@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "yhei-diary-emdash",
+  "account_id": "7255fd8ded983ed62a629fe7bd775440",
+  "main": "./worker.mjs",
+  "compatibility_date": "2026-02-24",
+  "workers_dev": true,
+  "preview_urls": false,
+  "triggers": { "crons": [] }
+}

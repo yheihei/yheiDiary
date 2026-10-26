@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/prose.css';
+
+interface Props {
+  title: string;
+  html: string;
+}
+const { title, html } = Astro.props;
+---
+<Base title={title} description={`${title}。旧 WordPress で公開していた内容の保存版です。`}>
+  <article class="band legacy-page">
+    <div class="frame legacy-page__layout">
+      <header>
+        <p class="eyebrow">公開ページの保存版</p>
+        <h1>{title}</h1>
+        <p class="legacy-page__note">旧サイトで公開していた内容です。現在のサイト全体の方針は <a href="/privacy/">こちらのプライバシーページ</a>をご覧ください。</p>
+      </header>
+      <div class="prose legacy-page__body" set:html={html} />
+    </div>
+  </article>
+</Base>
+<style>
+  .legacy-page { padding-block: clamp(2rem, 5vw, 5rem); }
+  .legacy-page__layout { max-width: 70rem; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.2; margin: .5rem 0 1rem; }
+  .legacy-page__note { color: var(--color-text-secondary); margin: 0 0 2.5rem; }
+  .legacy-page__body { max-width: 48rem; }
+  .legacy-page__body :global(nav) { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-bottom: 2rem; }
+  .legacy-page__body :global(section) { margin-block: 2rem; }
+</style>

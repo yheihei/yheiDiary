@@ -1,0 +1,23 @@
+---
+import { getDb } from "emdash/runtime";
+import { sql } from "kysely";
+import Base from "../../layouts/Base.astro";
+const year = Number(Astro.params.year);
+if (!Number.isInteger(year) || year < 1900 || year > 2200) return Astro.rewrite("/404");
+const db = await getDb();
+const result = await sql<{ slug: string; title: string; published_at: string }>`
+  SELECT slug, title, published_at FROM ec_posts
+  WHERE status = 'published'
+    AND published_at >= ${`${year}-01-01`}
+    AND published_at < ${`${year + 1}-01-01`}
+  ORDER BY published_at DESC, id DESC
+`.execute(db);
+if (Astro.cache?.enabled) Astro.cache.set({ tags: ["posts"] });
+const posts = result.rows;
+if (!posts.length) return Astro.rewrite("/404");
+---
+<Base title={`${year}年の日記`} description={`${year}年に書いた日記`}>
+  <header class="band intro"><div class="frame"><p class="eyebrow">Archive</p><h1 class="intro__title">{year}年の日記</h1><p><a href="/archive">← 年別一覧</a></p></div></header>
+  <section class="band section"><div class="frame"><ol class="entries">{posts.map((post) => <li><a href={`/posts/${post.slug}`}>{post.title}</a><time>{new Date(post.published_at).toLocaleDateString("ja-JP")}</time></li>)}</ol></div></section>
+</Base>
+<style>.entries{list-style:none;padding:0}.entries li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.5rem 1.5rem;padding:1rem 0;border-bottom:1px solid var(--color-border)}.entries time{color:var(--color-text-secondary)}</style>

@@ -1,0 +1,30 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "yhei-diary-emdash",
+  "account_id": "7255fd8ded983ed62a629fe7bd775440",
+	"workers_dev": true,
+	"preview_urls": false,
+	"main": "./src/worker.ts",
+	"compatibility_date": "2026-02-24",
+	"compatibility_flags": ["nodejs_compat"],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "yhei-diary-emdash",
+            "database_id": "ddc23f40-9355-4b22-97f9-0256a0decd06",
+		},
+	],
+	"kv_namespaces": [{ "binding": "SESSION", "id": "25428e69aea44ec9901e3d5663c6984f" }],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "yhei-diary-emdash-media",
+		},
+	],
+	// Sandboxed plugins require Worker Loader, available on Workers paid plans. Uncomment to enable:
+	// "worker_loaders": [{ "binding": "LOADER" }],
+	// General maintenance cron trigger
+	"triggers": {
+		"crons": ["* * * * *"],
+	},
+}
