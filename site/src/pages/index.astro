@@ -1,5 +1,6 @@
 ---
 import { getEmDashCollection } from "emdash";
+import { Image } from "emdash/ui";
 import Base from "../layouts/Base.astro";
 
 const { entries: posts, error, cacheHint } = await getEmDashCollection("posts", {
@@ -38,9 +39,16 @@ const projects = [
   </div></section>
   <section class="band section"><div class="frame">
     <div class="heading"><h2>新着日記</h2><a href="/posts">すべて見る →</a></div>
-    {posts.length ? <ol class="diary-list">{posts.map((post) =>
-      <li><a href={`/posts/${post.id}`}>{post.data.title}</a><time>{post.data.publishedAt?.toLocaleDateString("ja-JP")}</time></li>
-    )}</ol> : <p>日記は移行準備中です。</p>}
+    {posts.length ? <ol class="portal portal--diary">{posts.map((post) => <li>
+      <a class="portal__card" href={`/posts/${post.id}`}>
+        <span class="portal__visual">
+          {post.data.featured_image
+            ? <span class="portal__photo"><Image image={post.data.featured_image} alt="" sizes="(min-width: 1200px) 370px, (min-width: 42rem) 30vw, 100vw" /></span>
+            : <span class="portal__fallback" aria-hidden="true">{post.data.publishedAt?.getFullYear() ?? "Diary"}</span>}
+        </span>
+        <span class="portal__copy"><strong>{post.data.title}</strong><time class="portal__detail" datetime={post.data.publishedAt?.toISOString()}>{post.data.publishedAt?.toLocaleDateString("ja-JP")}</time></span>
+      </a>
+    </li>)}</ol> : <p>日記は移行準備中です。</p>}
     <p><a href="/archive">年別アーカイブを見る →</a></p>
   </div></section>
 </Base>
@@ -61,7 +69,7 @@ const projects = [
   @media (max-width: 42rem) {.portal {grid-template-columns: 1fr}}
 
   .heading {display: flex; align-items: baseline; justify-content: space-between; gap: 1rem}
-  .diary-list {list-style: none; padding: 0; margin: 1.5rem 0}
-  .diary-list li {display: flex; flex-wrap: wrap; justify-content: space-between; gap: .4rem 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border)}
-  .diary-list time {color: var(--color-text-secondary)}
+  .portal--diary {margin-bottom: 1.5rem}
+  .portal__photo {position: absolute; inset: 0}
+  .portal__photo :global(img) {width: 100%; max-width: none; height: 100%; max-height: none; object-fit: cover}
 </style>
