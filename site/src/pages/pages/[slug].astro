@@ -2,21 +2,24 @@
 import {
 	getEmDashEntry,
 	getSeoMeta,
-	decodeSlug,
 	getSiteSettings,
 } from "emdash";
 import { PortableText } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import { resolveBlogSiteIdentity } from "../../utils/site-identity";
+import { slugCandidates } from "../../utils/slug";
 import "../../styles/prose.css";
 
-const slug = decodeSlug(Astro.params.slug);
+const [slug, wordpressSlug] = slugCandidates(Astro.params.slug);
 
 if (!slug) {
 	return Astro.rewrite("/404");
 }
 
-const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+let { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+if (!page && wordpressSlug) {
+	({ entry: page, cacheHint } = await getEmDashEntry("pages", wordpressSlug));
+}
 
 if (!page) {
 	return Astro.rewrite("/404");
@@ -37,7 +40,7 @@ const seo = getSeoMeta(page, {
 	description={seo.description}
 	canonical={seo.canonical}
 	robots={seo.robots}
-	content={{ collection: "pages", id: page.data.id, slug }}
+	content={{ collection: "pages", id: page.data.id, slug: page.id }}
 >
 	<article class="band page">
 		<div class="frame page__layout">

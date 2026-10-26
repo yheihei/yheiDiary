@@ -4,7 +4,6 @@ import {
 	getEmDashCollection,
 	getTermsForEntries,
 	getSeoMeta,
-	decodeSlug,
 	getSiteSettings,
 } from "emdash";
 import { Image, PortableText, WidgetArea } from "emdash/ui";
@@ -15,15 +14,19 @@ import PostCard from "../../components/PostCard.astro";
 import { formatDate } from "../../utils/locale";
 import { getReadingTime } from "../../utils/reading-time";
 import { resolveBlogSiteIdentity } from "../../utils/site-identity";
+import { slugCandidates } from "../../utils/slug";
 import "../../styles/prose.css";
 
-const slug = decodeSlug(Astro.params.slug);
+const [slug, wordpressSlug] = slugCandidates(Astro.params.slug);
 
 if (!slug) {
 	return Astro.rewrite("/404");
 }
 
-const { entry: post, cacheHint } = await getEmDashEntry("posts", slug);
+let { entry: post, cacheHint } = await getEmDashEntry("posts", slug);
+if (!post && wordpressSlug) {
+	({ entry: post, cacheHint } = await getEmDashEntry("posts", wordpressSlug));
+}
 
 if (!post) {
 	return Astro.rewrite("/404");
@@ -120,7 +123,7 @@ const hasHeadings = (post.data.content ?? []).some(
 	type="article"
 	publishedTime={post.data.publishedAt?.toISOString() ?? null}
 	modifiedTime={post.data.updatedAt.toISOString()}
-	content={{ collection: "posts", id: post.data.id, slug }}
+	content={{ collection: "posts", id: post.data.id, slug: post.id }}
 >
 	<article class="post">
 		<header class="intro post-header">
