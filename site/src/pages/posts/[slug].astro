@@ -8,6 +8,7 @@ import {
 	getSiteSettings,
 } from "emdash";
 import { Image, PortableText, WidgetArea } from "emdash/ui";
+import ImportedColumns from "../../components/ImportedColumns.astro";
 import Base from "../../layouts/Base.astro";
 import Byline from "../../components/Byline.astro";
 import PostCard from "../../components/PostCard.astro";
@@ -233,7 +234,7 @@ const hasHeadings = (post.data.content ?? []).some(
 
 				<div class="post-main">
 					<div class="prose" data-post-content>
-						<PortableText value={post.data.content} />
+						<PortableText value={post.data.content} components={{ type: { columns: ImportedColumns } }} />
 					</div>
 
 
