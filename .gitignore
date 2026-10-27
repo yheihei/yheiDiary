@@ -1,4 +1,5 @@
 private/
+.env
 MIGRATION-STATUS.md
 site/node_modules/
 site/dist/

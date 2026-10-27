@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Create one yhei.dev EmDash draft from prepared private JSON.
 
-The owner enters a PAT in a real Terminal. Credentials are never written or
-printed, and an uncertain create result is never retried automatically.
+The PAT comes from EMDASH_PAT in the gitignored .env at the repository root, or,
+when that is empty, from hidden input in a real Terminal. Credentials are never
+written or printed, and an uncertain create result is never retried
+automatically.
 """
 from __future__ import annotations
 
@@ -20,6 +22,8 @@ import time
 ROOT = Path(__file__).resolve().parents[5]
 PRIVATE_DRAFTS = ROOT / "private/drafts"
 CLI = ROOT / "site/node_modules/.bin/emdash"
+ENV_FILE = ROOT / ".env"
+ENV_KEY = "EMDASH_PAT"
 SITE = "https://yhei.dev"
 ACCESS_APP = SITE + "/_emdash/admin"
 OWNER_EMAIL = "yheihei0126@gmail.com"
@@ -50,6 +54,23 @@ def read_prepared(path_arg: str, slug: str) -> tuple[Path, str]:
     if data["title"].strip() != data["title"]:
         raise Stop("タイトル前後の空白を確認してください。")
     return path, data["title"]
+
+
+def env_file_pat() -> str:
+    """Return EMDASH_PAT from the repository root .env, or "" when it is not set."""
+    if not ENV_FILE.is_file():
+        return ""
+    if ENV_FILE.stat().st_mode & 0o077:
+        raise Stop(".env の権限を 0600 にしてください。")
+    try:
+        lines = ENV_FILE.read_text(encoding="utf-8").splitlines()
+    except OSError as exc:
+        raise Stop(".env を読めません。") from exc
+    for line in lines:
+        key, sep, value = line.partition("=")
+        if sep and key.strip().removeprefix("export ").strip() == ENV_KEY:
+            return value.strip().strip("\"'")
+    return ""
 
 
 def cached_access_jwt() -> str:
@@ -124,10 +145,12 @@ def create(path_arg: str, slug: str, secret_reader=getpass.getpass) -> str:
     path, title = read_prepared(path_arg, slug)
     if not CLI.is_file():
         raise Stop("このサイトのEmDash CLIが見つかりません。")
-    if not sys.stdin.isatty():
-        raise Stop("実際のTerminalで対話式に実行してください。")
     jwt = cached_access_jwt()
-    pat = secret_reader("EmDash PAT を貼り付けて Enter（表示されません）: ").strip()
+    pat = env_file_pat()
+    if not pat:
+        if not sys.stdin.isatty():
+            raise Stop(".env の EMDASH_PAT が空です。実際のTerminalで対話式に実行してください。")
+        pat = secret_reader("EmDash PAT を貼り付けて Enter（表示されません）: ").strip()
     if not pat:
         raise Stop("PATが入力されていません。")
     env = os.environ.copy()
