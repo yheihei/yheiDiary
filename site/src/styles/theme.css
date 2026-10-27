@@ -32,3 +32,38 @@
 
 :root {
 }
+
+/*
+  Phones: the frame fills the screen so the body text runs nearly edge to
+  edge. The rails, the crosshairs and the header's side borders would sit
+  right on the screen edge, so they are hidden; the bands keep their rules.
+  The header styles are scoped in Base.astro, hence !important.
+*/
+@media (max-width: 640px) {
+	:root {
+		--frame-margin: 0px;
+	}
+
+	body::before {
+		border-inline: 0;
+	}
+
+	.band::before,
+	.band::after,
+	.site-header::before,
+	.site-header::after {
+		content: none !important;
+	}
+
+	.site-header__inner {
+		border-inline: 0 !important;
+	}
+}
+
+/*
+  Japanese body text fills each line. Safari's text-wrap: pretty shortens
+  every line of a paragraph to even out the rag, leaving a gap on the right.
+*/
+.prose :is(p, li) {
+	text-wrap: wrap;
+}
