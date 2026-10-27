@@ -383,6 +383,46 @@ const hasHeadings = (post.data.content ?? []).some(
 			img.addEventListener("error", showFallback, { once: true });
 			if (img.complete && img.naturalWidth === 0) showFallback();
 		});
+
+		// Show X posts as X's own cards. A block whose whole text is a post URL
+		// (imported WordPress embeds) becomes the blockquote that widgets.js
+		// expects; oEmbed blockquotes are already in that shape.
+		function embedXPosts() {
+			if (!content) return;
+			const postUrl =
+				/^https?:\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/\w+\/status(?:es)?\/\d+(?:[/?#]\S*)?$/;
+			content.querySelectorAll<HTMLElement>("p, div, figure").forEach((block) => {
+				if (block.closest("blockquote.twitter-tweet")) return;
+				if ([...block.children].some((child) => !["A", "BR"].includes(child.tagName))) return;
+				const url = block.textContent?.trim() ?? "";
+				if (!postUrl.test(url)) return;
+				const quote = document.createElement("blockquote");
+				quote.className = "twitter-tweet";
+				const link = document.createElement("a");
+				link.href = url.replace(/^http:/, "https:");
+				link.textContent = url;
+				quote.appendChild(link);
+				block.replaceWith(quote);
+			});
+
+			const quotes = content.querySelectorAll<HTMLElement>("blockquote.twitter-tweet");
+			if (quotes.length === 0) return;
+			const root = document.documentElement;
+			const dark =
+				root.classList.contains("dark") ||
+				(!root.classList.contains("light") &&
+					matchMedia("(prefers-color-scheme: dark)").matches);
+			quotes.forEach((quote) => {
+				quote.dataset.theme = dark ? "dark" : "light";
+				quote.dataset.dnt = "true";
+			});
+			const script = document.createElement("script");
+			script.src = "https://platform.twitter.com/widgets.js";
+			script.async = true;
+			document.body.appendChild(script);
+		}
+
+		embedXPosts();
 	</script>
 </Base>
 
@@ -537,6 +577,13 @@ const hasHeadings = (post.data.content ?? []).some(
 	.prose :global(.unavailable-image small) {
 		font-size: var(--font-size-sm);
 		color: var(--color-muted);
+	}
+
+	/* X's card document sets no color-scheme. Matching it keeps the iframe
+	   canvas transparent, so the card's rounded corners don't show white in
+	   dark mode. */
+	.prose :global(iframe[id^="twitter-widget"]) {
+		color-scheme: normal;
 	}
 
 	.toc__list {
