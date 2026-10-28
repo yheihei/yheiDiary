@@ -29,7 +29,7 @@ python3 site/.agents/skills/diary-publishing/scripts/prepare_post.py "/Users/yhe
 ## 2. アイキャッチを3枚作って1枚選ぶ
 
 1. [references/eyecatch.md](references/eyecatch.md) を読み、絵柄の決まりに沿って、構図の違うプロンプトを3つ書く。置き場所は `private/drafts/<slug>/eyecatch/a.prompt.md`、`b.prompt.md`、`c.prompt.md`。
-2. 3枚をまとめて作る。Gemini の Nano Banana 2 で 16:9 の 1K、1枚あたり約 $0.07。
+2. 3枚をまとめて作る。Gemini の Nano Banana 2 で 16:9 の 1K、1枚あたり約0.07ドル。
 
    ```bash
    python3 site/.agents/skills/diary-publishing/scripts/make_eyecatch.py <slug>
