@@ -7,6 +7,7 @@
 | WordPressをEmDashへ移行 | 暗い紺と紫に琥珀色の、落ち着いた editorial 調 | `https://yhei.dev/featured/wordpress-to-emdash-67cb0a1a78b4fb9e.jpg` |
 | AI slopがとんでもない | クリーム色の紙に色鉛筆とガッシュ、絵本のような暖かい調子 | `https://yhei.dev/featured/ai-slop-7dfe45517a94cc86.jpg` |
 | 脆弱性祭り | AI slop と同じ色鉛筆調 | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/20261027-vulnerability-fest-57a08d11e0122f22.jpg` |
+| ITエンジニアは不要になるか | 色鉛筆調。承認のハンコを押し続けるエンジニアとロボットたち | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/20261028-it-engineers-obsolete-7d11da2ec3854b72.jpg` |
 
 日記の語り口に合うのは色鉛筆調なので、これを基本にする。後ろ姿でぼさぼさ頭のエンジニアと三毛猫が続けて出ているので、話に合うなら入れる。トップと日記一覧ではカードが並ぶので、小さく縮めても何の絵か分かる構図にする。
 
