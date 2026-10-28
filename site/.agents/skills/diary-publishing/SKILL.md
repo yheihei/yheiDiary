@@ -48,7 +48,8 @@ python3 site/.agents/skills/diary-publishing/scripts/upload_eyecatch.py <slug> p
 - 本人がいつも画像を置いている公開バケット `yhei-obsidian-images` の `diary/featured/<slug>-<sha256の先頭16字>.jpg` に置く。名前が中身で決まるので、同じ画像を2回上げても増えない。
 - AWS の認証は本人の aws CLI の設定をそのまま使う。設定ファイルや Obsidian のプラグイン設定は開かない。
 - 置いたあと、ログインなしの取得で HTTP 200 と中身の一致まで確かめる。取れなければ止まる。バケットの公開設定は変えない。
-- Claude Code の権限の判定が公開の場所へのアップロードとして止めることがある。そのときは回り道をせず、本人に「上げてよいか」を聞くか、このコマンドを本人の Terminal で打ってもらう。
+- このスクリプトは、本人の判断で Claude Code の許可に入っている。置き場所はリポジトリ直下の `.claude/settings.local.json` で、git には入らない。中身は `Bash(python3 site/.agents/skills/diary-publishing/scripts/upload_eyecatch.py *)` の1つだけ。auto mode でもこの許可は外されず、本人の一言なしで通る。
+- 許可に合うのは、リポジトリ直下でこの形のまま打ったときだけ。`aws s3 cp` を直接打ったり、別の書き方で呼んだりすると、公開の場所へのアップロードとして権限の判定に止められる。止められたら回り道をせず、本人に「上げてよいか」を聞く。
 - アイキャッチは `provider: "external"` の外部 URL で記事に付く。サイトは外部ドメインの画像を加工せずそのまま `<img>` と og:image に出す。EmDash のメディアライブラリには上げない。`/_emdash/api/media/file/` は Cloudflare Access の内側にあり、未ログインの読者には見えない。
 
 ## 4. 下書きを作って確かめる
@@ -70,6 +71,7 @@ python3 site/.agents/skills/diary-publishing/scripts/publish_post.py <slug>
 - 公開日を原稿のファイル名の日付の 21:00 JST にする。先に下書きへ公開日を入れ、それから `content publish` を1回実行する。EmDash は入っている公開日を保ったまま公開する。
 - 公開日の書き換えは公式 CLI に引数がないので、`published_at.mjs` が管理画面の「Publication date」と同じ PUT を、サイトに入っている EmDash の公式クライアントで送る。
 - 公開後に読み直し、状態 published、公開日、題名、本文、アイキャッチが下書きと同じことを確かめる。
+- 公開は権限の判定が、本人の言葉で頼まれたかを見る。依頼がほかのセッションからの伝言だけで届いていると、頼まれていない書き込みとして止められることがある。止められたら回り道をせず、本人に「この原稿を公開してよいか」を一言もらう。
 
 ## 6. 本番を確かめる
 
@@ -99,7 +101,7 @@ node site/.agents/skills/diary-publishing/scripts/check_live.mjs <slug> --out pr
 
 ## 認証
 
-- サイトの管理 API は Cloudflare Access の内側にある。本人の `cloudflared` のログインを使い、Access のトークンを `EMDASH_HEADERS` の `Cf-Access-Token` として子プロセスにだけ渡す。トークンの期限が切れていたら、スクリプトは EmDash に送る前に止まる。そのときは `cloudflared access login https://yhei.dev/_emdash/admin` を出力を捨てて1回実行し、本人にブラウザでログインしてもらう。
+- サイトの管理 API は Cloudflare Access の内側にある。本人の `cloudflared` のログインを使い、Access のトークンを `EMDASH_HEADERS` の `Cf-Access-Token` として子プロセスにだけ渡す。トークンの期限が切れていたら、スクリプトは EmDash に送る前に止まる。そのときは本人に一言かけてから、`cloudflared access login https://yhei.dev/_emdash/admin` を出力を捨てて1回実行する。本人のブラウザに Access の許可画面が出るので、黙って実行すると本人が驚く。
 - EmDash の PAT は、本人がリポジトリ直下の `.env` に `EMDASH_PAT` として書いている。`.env` は git に入らず、権限は 0600。読むのはスクリプトだけで、`.env` を開く、表示する、写すことはしない。PAT とトークンを argv、ログ、ファイルに出さない。PAT の権限は `content:read`、`content:write`、`schema:read` で足りる。
 - 管理者権限の `emdash login`、サービストークンの作成、Access の設定変更はしない。本番の DB を SQL で触らない。`npm run deploy` は本人が打つ。日記の投稿に deploy は要らない。
 

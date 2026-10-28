@@ -32,6 +32,8 @@ OWNER_EMAIL = "yheihei0126@gmail.com"
 ACCESS_AUDIENCE = "e1746d72a727a25e7a6483fe433625de61294d91b7dda73a65cd2b7a87f68bfe"
 SLUG_PATTERN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 MEDIA_FILE_PATH = "/_emdash/api/media/file/"
+RELOGIN = (" 本人に一言かけてから cloudflared access login " + ACCESS_APP
+           + " を出力を捨てて1回実行してください。ブラウザに Access の許可画面が出ます。")
 
 
 class Stop(Exception):
@@ -64,7 +66,7 @@ def cached_access_jwt() -> str:
         jwt = result.stdout.strip()
         parts = jwt.split(".")
         if len(parts) != 3:
-            raise Stop("既存のCloudflare Accessログインを確認できません。")
+            raise Stop("既存のCloudflare Accessログインを確認できません。" + RELOGIN)
         payload = json.loads(base64.urlsafe_b64decode(parts[1] + "=" * (-len(parts[1]) % 4)))
         audiences = payload.get("aud")
         if isinstance(audiences, str):
@@ -74,11 +76,10 @@ def cached_access_jwt() -> str:
                 or not isinstance(audiences, list) or ACCESS_AUDIENCE not in audiences
                 or not isinstance(payload.get("exp"), (int, float)) or payload["exp"] <= now + 60
                 or not isinstance(payload.get("nbf"), (int, float)) or payload["nbf"] > now):
-            raise Stop("Cloudflare Access認証の本人・対象・期限が一致しません。")
+            raise Stop("Cloudflare Access認証の本人・対象・期限が一致しません。" + RELOGIN)
         return jwt
     except (subprocess.SubprocessError, OSError, ValueError, KeyError) as exc:
-        raise Stop("既存のCloudflare Accessログインを確認できません。"
-                   " cloudflared access login " + ACCESS_APP + " を1回実行してください。") from exc
+        raise Stop("既存のCloudflare Accessログインを確認できません。" + RELOGIN) from exc
 
 
 @contextmanager
