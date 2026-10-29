@@ -22,7 +22,7 @@ const projects = [
 <Base title={siteTitle} description="大学生のころから、これから先まで。">
   <header class="band intro"><div class="frame">
     <p class="eyebrow">Yhei diary</p>
-    <h1 class="intro__title">ジジイになった自分に読ませる日記です。</h1>
+    <h1 class="intro__title intro__title--home">ジジイになった<br />自分に読ませる日記です。</h1>
   </div></header>
   <section class="band section"><div class="frame">
     <h2>主なプロジェクト</h2>
@@ -54,6 +54,9 @@ const projects = [
   </div></section>
 </Base>
 <style>
+  /* The second line is 12 characters wide; shrink the title until it fits the frame */
+  .intro .frame {container-type: inline-size}
+  .intro .intro__title--home {max-width: none; font-size: min(var(--font-size-display), 100cqi / 12)}
   .portal {display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; list-style: none; padding: 0; margin-top: 1.5rem}
   .portal li {min-width: 0}
   .portal__card {display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: var(--color-surface); text-decoration: none; color: var(--color-text)}
