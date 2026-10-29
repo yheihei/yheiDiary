@@ -12,7 +12,7 @@ if (error) return new Response("日記を読み込めませんでした", { stat
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
 const projects = [
-  { name: "VLCNP Story", href: "https://vlcnp-story.y-game.dev/", detail: "ゲーム公式サイト", image: "/project-covers/vlcnp.jpg", imageAlt: "VLCNP Storyのパンダのキービジュアル", fallback: "VLCNP", shape: "wide", width: 1200, height: 630 },
+  { name: "VLCNP Story", href: "https://vlcnp-story.y-game.dev/", detail: "ゲーム公式サイト", image: "/project-covers/vlcnp-capsule.jpg", imageAlt: "夜の空中遺跡の崖に立つパンダのリーリーとトラのAkim、左にVLCNP Storyのロゴ", fallback: "VLCNP", shape: "wide", width: 1200, height: 630 },
   { name: "カルマロック", href: "https://apps.apple.com/jp/app/%E3%82%AB%E3%83%AB%E3%83%9E%E3%83%AD%E3%83%83%E3%82%AF/id6811883726", detail: "iPhoneアプリ · App Store", image: "/project-covers/karma.jpg", imageAlt: "カルマロックの南京錠型アプリアイコン", fallback: "KARMA", shape: "square", width: 512, height: 512 },
   { name: "YouTube", href: "https://www.youtube.com/@yhei_hei", detail: "ゲーム制作の動画", image: "/project-covers/youtube.jpg", imageAlt: "わいへいのYouTubeチャンネルアイコン", fallback: "YouTube", shape: "square", width: 900, height: 900 },
   { name: "Spotify", href: "https://open.spotify.com/show/1e6S1mfphGGh8O1K9ZU9Ze", detail: "素人ゲーム制作者の日常", image: "/project-covers/spotify.jpg", imageAlt: "ポッドキャスト『素人ゲーム制作者の日常』のカバー", fallback: "Spotify", shape: "square", width: 640, height: 640 },
