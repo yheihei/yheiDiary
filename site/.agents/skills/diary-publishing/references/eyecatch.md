@@ -8,6 +8,7 @@
 | AI slopがとんでもない | クリーム色の紙に色鉛筆とガッシュ、絵本のような暖かい調子 | `https://yhei.dev/featured/ai-slop-7dfe45517a94cc86.jpg` |
 | 脆弱性祭り | AI slop と同じ色鉛筆調 | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/20261027-vulnerability-fest-57a08d11e0122f22.jpg` |
 | ITエンジニアは不要になるか | 色鉛筆調。承認のハンコを押し続けるエンジニアとロボットたち | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/20261028-it-engineers-obsolete-7d11da2ec3854b72.jpg` |
+| VeryLongCNP物語 | 生成せず、Steam のメインカプセル 1232×706 を 16:9 に切った。ゲームの紹介記事は本人のカプセルを使う | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/vlcnp-story-869b503fbaab0400.jpg` |
 
 日記の語り口に合うのは色鉛筆調なので、これを基本にする。後ろ姿でぼさぼさ頭のエンジニアと三毛猫が続けて出ているので、話に合うなら入れる。トップと日記一覧ではカードが並ぶので、小さく縮めても何の絵か分かる構図にする。
 
