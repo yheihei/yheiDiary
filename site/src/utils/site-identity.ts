@@ -12,7 +12,7 @@ export interface BlogSiteIdentitySettings {
 	favicon?: MediaReference;
 }
 
-const DEFAULT_SITE_TITLE = "Yheiの日記";
+const DEFAULT_SITE_TITLE = "見てるか未来の俺";
 const DEFAULT_SITE_TAGLINE = "大学生のころから、これから先まで。";
 
 export function resolveBlogSiteIdentity(settings?: BlogSiteIdentitySettings) {

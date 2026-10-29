@@ -1,7 +1,7 @@
 // Minimal emergency response. Do not import Astro, EmDash, or a storage client.
 const page = `<!doctype html>
 <html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>一時休止中 | Yheiの日記</title>
+<meta name="robots" content="noindex,nofollow"><title>一時休止中 | 見てるか未来の俺</title>
 <style>body{font-family:system-ui,sans-serif;margin:0;background:#f6f5f1;color:#242424;min-height:100vh;display:grid;place-items:center}main{max-width:36rem;padding:2rem;line-height:1.8}h1{font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.3}</style>
 <main><h1>ただいま一時休止中です</h1><p>日記サイトの公開を一時停止しています。再開までお待ちください。</p></main></html>`;
 const headers = {

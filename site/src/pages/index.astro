@@ -1,7 +1,8 @@
 ---
-import { getEmDashCollection } from "emdash";
+import { getEmDashCollection, getSiteSettings } from "emdash";
 import { Image } from "emdash/ui";
 import Base from "../layouts/Base.astro";
+import { resolveBlogSiteIdentity } from "../utils/site-identity";
 
 const { entries: posts, error, cacheHint } = await getEmDashCollection("posts", {
   orderBy: { published_at: "desc" },
@@ -9,6 +10,7 @@ const { entries: posts, error, cacheHint } = await getEmDashCollection("posts", 
 });
 if (error) return new Response("日記を読み込めませんでした", { status: 500 });
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+const { siteTitle } = resolveBlogSiteIdentity(await getSiteSettings());
 const projects = [
   { name: "VLCNP Story", href: "https://vlcnp-story.y-game.dev/", detail: "ゲーム公式サイト", image: "/project-covers/vlcnp.jpg", imageAlt: "VLCNP Storyのパンダのキービジュアル", fallback: "VLCNP", shape: "wide", width: 1200, height: 630 },
   { name: "カルマロック", href: "https://apps.apple.com/jp/app/%E3%82%AB%E3%83%AB%E3%83%9E%E3%83%AD%E3%83%83%E3%82%AF/id6811883726", detail: "iPhoneアプリ · App Store", image: "/project-covers/karma.jpg", imageAlt: "カルマロックの南京錠型アプリアイコン", fallback: "KARMA", shape: "square", width: 512, height: 512 },
@@ -17,11 +19,10 @@ const projects = [
   { name: "note", href: "https://note.com/yheihei0126", detail: "制作と日々の記録", image: "/project-covers/note.jpg", imageAlt: "わいへいのnoteページのゲーム画面", fallback: "note", shape: "wide", width: 1024, height: 536 },
 ];
 ---
-<Base title="Yheiの日記" description="大学生のころから、これから先まで。">
+<Base title={siteTitle} description="大学生のころから、これから先まで。">
   <header class="band intro"><div class="frame">
     <p class="eyebrow">Yhei diary</p>
-    <h1 class="intro__title">ベリーロング日記。</h1>
-    <p class="intro__lead">大学生のころから書いてきたことを、これから先まで残すための場所です。<br />仕事、家族、制作、考えたこと。</p>
+    <h1 class="intro__title">ジジイになった自分に読ませる日記です。</h1>
   </div></header>
   <section class="band section"><div class="frame">
     <h2>主なプロジェクト</h2>
@@ -53,7 +54,6 @@ const projects = [
   </div></section>
 </Base>
 <style>
-  .intro__lead {max-width: 46rem; line-height: 1.8}
   .portal {display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .85rem; list-style: none; padding: 0; margin-top: 1.5rem}
   .portal li {min-width: 0}
   .portal__card {display: flex; flex-direction: column; height: 100%; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-xl); background: var(--color-surface); text-decoration: none; color: var(--color-text)}
