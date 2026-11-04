@@ -10,7 +10,17 @@
 | ITエンジニアは不要になるか | 色鉛筆調。承認のハンコを押し続けるエンジニアとロボットたち | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/20261028-it-engineers-obsolete-7d11da2ec3854b72.jpg` |
 | VeryLongCNP物語 | 生成せず、Steam のメインカプセル 1232×706 を 16:9 に切った。ゲームの紹介記事は本人のカプセルを使う | `https://yhei-obsidian-images.s3.ap-northeast-1.amazonaws.com/diary/featured/vlcnp-story-869b503fbaab0400.jpg` |
 
-日記の語り口に合うのは色鉛筆調なので、これを基本にする。後ろ姿でぼさぼさ頭のエンジニアと三毛猫が続けて出ているので、話に合うなら入れる。トップと日記一覧ではカードが並ぶので、小さく縮めても何の絵か分かる構図にする。
+日記の語り口に合うのは色鉛筆調なので、これを基本にする。後ろ姿でぼさぼさ頭のエンジニアは、話に合うなら入れる。トップと日記一覧ではカードが並ぶので、小さく縮めても何の絵か分かる構図にする。
+
+## 茶色いホーランドロップを必ず出す
+
+本人が飼っているウサギ。どの案にも必ず1匹描く。これまで出していた三毛猫はやめて、猫は描かない。Scene の段落の最後に次をそのまま入れ、`<where>` だけ構図に合わせて書く。
+
+```text
+A small brown Holland Lop rabbit sits <where>. It has a compact, round, chunky body, a short flat face with a soft rounded muzzle, and soft floppy ears hanging down on both sides of its head, with no upright ears. Warm chocolate-brown fur. There is no cat in the picture.
+```
+
+耳が立ったり猫に見えたりしたら、`thumbnail.mjs generate --ref` に元の絵を渡して、ウサギだけ直す。構図を保ったまま直せる。ゲームの紹介記事で Steam のカプセルを使うときは、絵に手を入れないのでウサギは足さない。
 
 ## 3案の分け方
 
@@ -45,13 +55,14 @@ Style: elegant dark charcoal, deep indigo, muted violet, and warm amber accents.
 ## 選び方
 
 1. 拡大して、読める文字、数字、ロゴ、実在のブランドに見えるものがないか見る。あればその案は落とす。
-2. 400px ぐらいに縮めても、何の絵か分かるか。
-3. 記事を読んだ人が「ああ、あの話」と思えるか。
-4. これまでのアイキャッチと並べて浮かないか。
+2. 茶色いホーランドロップがいて、垂れ耳のウサギに見えるか。
+3. 400px ぐらいに縮めても、何の絵か分かるか。
+4. 記事を読んだ人が「ああ、あの話」と思えるか。
+5. これまでのアイキャッチと並べて浮かないか。
 
 ## 代替テキスト
 
-絵に描いてあることを1文で書く。記事の要約や感想は書かない。例: 「窓の外で雷を落とす神々の雲をよそに、机でアップデートを続けるエンジニアと机の下の猫」。
+絵に描いてあることを1文で書く。記事の要約や感想は書かない。例: 「窓の外で雷を落とす神々の雲をよそに、机でアップデートを続けるエンジニアと机の下のウサギ」。
 
 ## 脆弱性祭りで作った3案
 
