@@ -14,13 +14,17 @@
 
 ## 茶色いホーランドロップを必ず出す
 
-本人が飼っているウサギ。どの案にも必ず1匹描く。これまで出していた三毛猫はやめて、猫は描かない。Scene の段落の最後に次をそのまま入れ、`<where>` だけ構図に合わせて書く。
+本人が飼っているウサギ。どの案にも必ず1匹描く。これまで出していた三毛猫はやめて、猫は描かない。
+
+形と色の手本は `private/eyecatch-refs/holland-lop-illustration.jpg` で、`make_eyecatch.py` が自動で `--ref` に渡す。写実的にせず、丸くて小さい絵本のウサギにする。本人に「リアルすぎる」と言われた形があるので、毛並みを細かく描き込まない。
+
+Scene の段落の最後に次をそのまま入れ、`<where>` だけ構図に合わせて書く。
 
 ```text
-A small brown Holland Lop rabbit sits <where>. It has a very round, chunky, loaf-shaped body, a short flat face with a soft rounded muzzle, and soft floppy ears hanging down on both sides of its head, with no upright ears. Muted warm sandy milk-tea brown fur with fine grey-brown ticking, pale cream along the lower sides, and ears that turn darker slate grey-brown toward the tips. Not chocolate brown and not golden yellow. There is no cat in the picture.
+A small Holland Lop rabbit that looks like the rabbit in the reference image sits <where>, drawn in the same simple, cute picture-book way with little fur detail, not realistic. It has a round body, a round head with a small face, and soft floppy ears hanging down on both sides of its head, with no upright ears. Muted warm sandy milk-tea brown fur, a pale cream chest, and slate grey-brown ears. Not chocolate brown and not golden yellow. There is no cat in the picture.
 ```
 
-耳が立ったり猫に見えたり、毛の色が違ったりしたら、`thumbnail.mjs generate --ref` に元の絵を渡して、ウサギだけ直す。構図を保ったまま直せる。`--ref` を2つにして、本物の写真 `private/eyecatch-refs/holland-lop.jpg` も渡すと色が合わせやすい。チョコレート色や金色に振れやすいので、写真と見比べる。ゲームの紹介記事で Steam のカプセルを使うときは、絵に手を入れないのでウサギは足さない。
+耳が立ったり猫に見えたり、形や色が手本と違ったりしたら、`thumbnail.mjs generate --ref` に元の絵と手本を渡して、ウサギだけ直す。構図を保ったまま直せる。生成で直すと形が変わるので、形はよくて色だけ違うときは色だけを画像処理で塗り直す。本物の写真は `private/eyecatch-refs/holland-lop.jpg` にある。ゲームの紹介記事で Steam のカプセルを使うときは、絵に手を入れないのでウサギは足さない。
 
 ## 3案の分け方
 
@@ -55,7 +59,7 @@ Style: elegant dark charcoal, deep indigo, muted violet, and warm amber accents.
 ## 選び方
 
 1. 拡大して、読める文字、数字、ロゴ、実在のブランドに見えるものがないか見る。あればその案は落とす。
-2. 薄茶色のホーランドロップがいて、垂れ耳のウサギに見えるか。
+2. 手本と同じ形と色のホーランドロップがいるか。写実的になっていないか。
 3. 400px ぐらいに縮めても、何の絵か分かるか。
 4. 記事を読んだ人が「ああ、あの話」と思えるか。
 5. これまでのアイキャッチと並べて浮かないか。

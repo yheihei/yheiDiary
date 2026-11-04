@@ -36,13 +36,15 @@ def generate(slug: str) -> list[Path]:
     if not GENERATOR.is_file():
         raise Stop("画像の生成スクリプトが見つかりません: " + str(GENERATOR))
     before = {p for p in folder.iterdir() if p.suffix in IMAGE_SUFFIXES}
+    rabbit = ROOT / "private" / "eyecatch-refs" / "holland-lop-illustration.jpg"
+    refs = ["--ref", str(rabbit)] if rabbit.is_file() else []
 
     jobs = []
     for prompt in prompts:
         name = prompt.name.removesuffix(".prompt.md")
         jobs.append(subprocess.Popen(
             ["node", str(GENERATOR), "generate", "--prompt", str(prompt), "--out", str(folder),
-             "--name", name, "--n", "1", "--size", "1K", "--aspect", "16:9"],
+             "--name", name, "--n", "1", "--size", "1K", "--aspect", "16:9", *refs],
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
         ))
     failed = 0
