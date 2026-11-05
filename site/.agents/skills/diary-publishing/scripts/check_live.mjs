@@ -1,7 +1,7 @@
 // Usage: node check_live.mjs <slug> --out <dir relative to the repository root>
 // Checks one published diary post on production without logging in, the way a
 // reader sees it, and takes screenshots with Playwright WebKit:
-//   article page  HTTP 200, title, date, eyecatch loaded, og:image, X cards, no sideways scroll
+//   article page  HTTP 200, title, date, eyecatch loaded, og:image, X cards, YouTube players, no sideways scroll
 //   /posts and /  the post is listed and its eyecatch thumbnail loaded
 //   og:image      fetchable anonymously as an image
 // Expected values come from private/drafts/<slug>.source.json. Writes checks.json
@@ -22,6 +22,8 @@ const PLAYWRIGHT =
 	join(homedir(), ".cache/yhei-diary-checker/node_modules/playwright/index.mjs");
 const X_URL_ONLY =
 	/>\s*https?:\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/\w+\/status(?:es)?\/\d+\S*?\s*</g;
+const YOUTUBE_URL_ONLY =
+	/>\s*https?:\/\/(?:(?:www\.|m\.|music\.)?youtube(?:-nocookie)?\.com\/(?:watch\?\S*?\bv=|(?:embed|live|shorts|v)\/)|youtu\.be\/)[\w-]{11}\S*?\s*</g;
 
 const [slug, flag, outArg] = process.argv.slice(2);
 if (!slug || flag !== "--out" || !outArg) {
@@ -70,6 +72,7 @@ async function checkArticle(name, context) {
 	const html = await (await fetch(url)).text();
 	const xExpected =
 		(html.match(X_URL_ONLY) ?? []).length + (html.match(/<blockquote class="twitter-tweet"/g) ?? []).length;
+	const videosExpected = (html.match(YOUTUBE_URL_ONLY) ?? []).length;
 	const page = await context.newPage();
 	const response = await page.goto(url, { waitUntil: "load" });
 	if (xExpected) {
@@ -93,6 +96,7 @@ async function checkArticle(name, context) {
 			ogImage: document.querySelector('meta[property="og:image"]')?.content ?? null,
 			hero: hero && { loaded: hero.complete && hero.naturalWidth > 0, src: hero.currentSrc || hero.src },
 			xCards: document.querySelectorAll("[data-post-content] iframe[id^='twitter-widget']").length,
+			videos: document.querySelectorAll("[data-post-content] .video-embed iframe").length,
 			scrollWidth: document.documentElement.scrollWidth,
 			viewportWidth: window.innerWidth,
 		};
@@ -105,11 +109,12 @@ async function checkArticle(name, context) {
 	expect(sameInstant(state.datetime, source.publishedAt), `${name}: 日付が違う (${state.datetime})`);
 	expect(state.scrollWidth <= state.viewportWidth, `${name}: 横にはみ出している`);
 	expect(state.xCards >= xExpected, `${name}: X のカードが ${state.xCards}/${xExpected}`);
+	expect(state.videos >= videosExpected, `${name}: YouTube の埋め込みが ${state.videos}/${videosExpected}`);
 	if (eyecatch) {
 		expect(state.hero?.loaded && state.hero.src === eyecatch, `${name}: アイキャッチが出ていない`);
 		expect(state.ogImage === eyecatch, `${name}: og:image が違う (${state.ogImage})`);
 	}
-	return { url, status: response?.status(), xExpected, ...state, files: [file] };
+	return { url, status: response?.status(), xExpected, videosExpected, ...state, files: [file] };
 }
 
 async function checkListing(name, context, path, cardSelector) {

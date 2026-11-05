@@ -25,6 +25,7 @@ python3 site/.agents/skills/diary-publishing/scripts/prepare_post.py "/Users/yhe
 - 原稿は自分でも全部読む。アイキャッチの絵を考えるのに要る。
 - 本文の画像は、原稿にある S3 の URL をそのまま使う。公開 URL のない画像があるとスクリプトは止まるので、本人に聞く。
 - X のポストの URL だけの行は、そのまま残す。記事ページのスクリプトが X のカードに変える。oEmbed の HTML を埋め込む必要はない。
+- YouTube の動画の URL だけの行も、そのまま残す。記事ページのスクリプトがプレーヤーの埋め込みに変える。文の途中の URL は変えない。
 
 ## 2. アイキャッチを3枚作って1枚選ぶ
 
@@ -80,7 +81,7 @@ node site/.agents/skills/diary-publishing/scripts/check_live.mjs <slug> --out pr
 ```
 
 - ログインなしで、Playwright の WebKit を使い、iPhone 375×812 の3倍ダークと PC 1280 幅ライトで記事の先頭を撮る。日記一覧とトップのカードも撮る。
-- 確かめること: 記事ページが HTTP 200、題名、日付、アイキャッチが読み込めていること、og:image が S3 の URL でログインなしに取れること、X のカードの数、横にはみ出していないこと、日記一覧とトップに載っていてサムネイルが出ていること。
+- 確かめること: 記事ページが HTTP 200、題名、日付、アイキャッチが読み込めていること、og:image が S3 の URL でログインなしに取れること、X のカードの数、YouTube の埋め込みの数、横にはみ出していないこと、日記一覧とトップに載っていてサムネイルが出ていること。
 - 結果は `checks.json` に残る。スクリプトが「ok」でも、撮った画像は Read で自分の目で見る。
 - Playwright は `~/.cache/yhei-diary-checker` に置いてある。ないときはスクリプトの先頭に書いた2行で入れる。
 
