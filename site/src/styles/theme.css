@@ -67,3 +67,11 @@
 .prose :is(p, li) {
 	text-wrap: wrap;
 }
+
+/*
+  "人間が書いた" sits in the post dateline like any other fact, one shade
+  stronger than the date and reading time.
+*/
+.post-header__human {
+	color: var(--color-text-secondary);
+}

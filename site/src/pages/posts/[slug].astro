@@ -178,6 +178,7 @@ const hasHeadings = (post.data.content ?? []).some(
 								)
 							}
 							<span>{readingTime} 分で読めます</span>
+							<span class="post-header__human">人間が書いた</span>
 						</p>
 					</div>
 				</div>
@@ -231,6 +232,10 @@ const hasHeadings = (post.data.content ?? []).some(
 						<div class="post-fact">
 							<dt class="eyebrow">読む時間</dt>
 							<dd>{readingTime} 分</dd>
+						</div>
+						<div class="post-fact">
+							<dt class="eyebrow">書いた人</dt>
+							<dd>人間</dd>
 						</div>
 					</dl>
 				</div>
