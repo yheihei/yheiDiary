@@ -509,6 +509,14 @@ const hasHeadings = (post.data.content ?? []).some(
 		translate: 2px 0;
 	}
 
+	/* Base.astro caps titles at 22ch and balances the lines. A ch is half a
+	   kana, so a Japanese title wrapped after about 11 characters, and balancing
+	   shortened every line on a phone. Both left the right side empty. */
+	.post-header__title {
+		max-width: 22em;
+		text-wrap: wrap;
+	}
+
 	.post-header__tags {
 		margin-block-end: var(--spacing-5);
 	}
